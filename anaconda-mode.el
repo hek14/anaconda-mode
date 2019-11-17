@@ -108,7 +108,7 @@ if not os.path.exists(server_directory):
 # Installation check.
 
 jedi_dep = ('jedi', '0.13.0')
-service_factory_dep = ('service_factory', '0.1.5')
+service_factory_dep = ('service_factory', '0.1.4')
 
 missing_dependencies = []
 
@@ -123,7 +123,7 @@ def instrument_installation():
                 if package[0] in path:
                     package_is_installed = True
         if not package_is_installed:
-            missing_dependencies.append('>='.join(package))
+            missing_dependencies.append('=='.join(package))
 
 instrument_installation()
 
@@ -148,12 +148,12 @@ del missing_dependencies[:]
 try:
     import jedi
 except ImportError:
-    missing_dependencies.append('>='.join(jedi_dep))
+    missing_dependencies.append('=='.join(jedi_dep))
 
 try:
     import service_factory
 except ImportError:
-    missing_dependencies.append('>='.join(service_factory_dep))
+    missing_dependencies.append('=='.join(service_factory_dep))
 
 # Try one more time in case if anaconda installation gets broken somehow
 if missing_dependencies:
@@ -163,7 +163,7 @@ if missing_dependencies:
 
 # Setup server.
 
-assert jedi.__version__ >= jedi_dep[1], 'Jedi version should be >= %s, current version: %s' % (jedi_dep[1], jedi.__version__,)
+assert jedi.__version__ == jedi_dep[1], 'Jedi version should be == %s, current version: %s' % (jedi_dep[1], jedi.__version__,)
 
 if virtual_environment:
     virtual_environment = jedi.create_environment(virtual_environment, safe=False)
